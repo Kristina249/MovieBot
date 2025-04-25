@@ -18,7 +18,7 @@ public class RegionHandler implements UserResponseHandler {
 		if (message.trim().equalsIgnoreCase("Не важно")) {
 			country = "notImpotant"; 
 		} else {
-			country = requestForCountryCode(message);
+			country = findCountryCode(message);
 		if (country == null) {
 			bot.sendMessage(chatId, "Такого региона нет в списке");
 			return;
@@ -29,13 +29,13 @@ public class RegionHandler implements UserResponseHandler {
 		bot.removeKeyboard(chatId, "Напишите минимальный рейтинг (от 1 до 10). Или напишите /skip, если это не важно");
 	}
 	
-	public String requestForCountryCode(String value) {
+	public String findCountryCode(String value) {
 		  try (BufferedReader reader = new BufferedReader(new FileReader("D:\\eclipse\\eclipse workspace\\MovieBot2\\src\\main\\resources\\countries.csv"))) {
 			  String line;
 			  String result = null;
 			  while ((line = reader.readLine()) != null) {
-				 String countryName = line.substring(0, line.indexOf(","));
-				 if (countryName.equalsIgnoreCase(value)) {
+				 String countryName = line.trim().substring(0, line.indexOf(","));
+				 if (countryName.equalsIgnoreCase(value.trim())) {
 					 result = line.substring(line.indexOf(",") + 2);
 					 break;
 				 }		 
