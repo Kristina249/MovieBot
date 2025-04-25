@@ -15,6 +15,7 @@ public class UsersPreferences {
 	String runtimeMin;
 	String runtimeMax;
 	List<JsonNode> movies;
+	int page = 1;
 	
 	public UsersPreferences(String telegramId, String userState) {
 		this.telegramId = telegramId;
@@ -96,5 +97,11 @@ public class UsersPreferences {
 	    }
 	    public void setMovies(List<JsonNode> movies) {
 	    	this.movies = movies;
+	    }
+	    public int getPage() {
+	    	return page;
+	    }
+	    public void setPage(int page) {
+	    	this.page = page;
 	    }
 }

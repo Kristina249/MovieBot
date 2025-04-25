@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import com.example.demo.telegramBotSettings.MovieSender;
 import com.example.demo.telegramBotSettings.TelegramBot;
 import com.example.demo.telegramBotSettings.UserResponseHandler;
 
@@ -20,9 +21,11 @@ public class TimeHandler implements UserResponseHandler {
 			return;
 		}
 		bot.getPreferences(chatId).setRuntimeMin(minTime.get(message));
-		bot.getPreferences(chatId).setRuntimeMin(maxTime.get(message));
+		bot.getPreferences(chatId).setRuntimeMax(maxTime.get(message));
 		bot.getPreferences(chatId).setUserState("READY");
 		bot.removeKeyboard(chatId, "Ищем фильмы");
+		MovieSender movieSender = new MovieSender();
+		movieSender.sentMovies(chatId, bot);
 	}
 
 }

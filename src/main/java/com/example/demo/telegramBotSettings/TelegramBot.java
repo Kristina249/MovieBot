@@ -55,6 +55,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 			String chatId = update.getMessage().getChatId().toString();
 			String receivedText = update.getMessage().getText();
 			if (receivedText.equals("/start")) {
+				if (preferences.containsKey(chatId)) {
+					preferences.remove(chatId);
+				}
 				sendMessage(chatId, "Название жанра");
 				UsersPreferences user = new UsersPreferences(chatId, UserState.CHOOSE_GENRE.name());
 				preferences.put(chatId, user);
@@ -114,4 +117,5 @@ public class TelegramBot extends TelegramLongPollingBot {
 	public UsersPreferences getPreferences(String chatId) {
 			return preferences.get(chatId);
 	}
+
 }

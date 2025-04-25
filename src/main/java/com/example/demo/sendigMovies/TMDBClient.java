@@ -17,19 +17,13 @@ public class TMDBClient {
 	final String API_KEY = "62972d61e70eda6830e96befdca61fff"; 
 	final String BASE_URL = "https://api.themoviedb.org/3";
 	public List<JsonNode> sendRequestForMovies(String genreId, String minYear, String maxYear, String region, 
-			String minRating, String runtimeMin, String runtimeMax) {		
-		int totalPages = 1;
-		int currentPage = 1;
-		List<JsonNode> movies = new ArrayList<>();
-
-		
+			String minRating, String runtimeMin, String runtimeMax, int page) {	
+		List<JsonNode> movies = new ArrayList<>();	
 		WebClient webClient = WebClient.builder()
 				.baseUrl(BASE_URL)
 				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
 		
-		while (currentPage <= totalPages) {
-			final int page = currentPage;
 		String response = webClient.get()
 				.uri(uriBuilder -> {
 					uriBuilder.path("/discover/movie")
@@ -61,6 +55,9 @@ public class TMDBClient {
 				.retrieve()
 			    .bodyToMono(String.class)
 			    .block();
+		if (response.isEmpty()) {
+			return null;
+		}
 		try {
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode root = objectMapper.readTree(response);
@@ -68,12 +65,10 @@ public class TMDBClient {
 		for (JsonNode node: resultsNode) {
 			movies.add(node);
 		}
-		totalPages = root.path("total_pages").asInt();
-		currentPage++;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}			
-		}
+		
 		return movies;
 
 	}

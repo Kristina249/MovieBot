@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import com.example.demo.handlers.DecadeHandler;
 import com.example.demo.handlers.GenreHandler;
 import com.example.demo.handlers.RatingHandler;
-import com.example.demo.handlers.ReadyHandler;
 import com.example.demo.handlers.RegionHandler;
 import com.example.demo.handlers.TimeHandler;
 import com.example.demo.telegramBotSettings.TelegramBot.UserState;
@@ -21,7 +20,6 @@ public class HandlerConfig {
         GenreHandler genreHandler,
         DecadeHandler decadeHandler,
         RatingHandler ratingHandler,
-        ReadyHandler readyHandler,
         RegionHandler regionHandler,
         TimeHandler timeHandler
     ) {
@@ -29,7 +27,6 @@ public class HandlerConfig {
         map.put(UserState.CHOOSE_GENRE, genreHandler);
         map.put(UserState.CHOOSE_DECADE, decadeHandler);
         map.put(UserState.CHOOSE_RATING, ratingHandler);
-        map.put(UserState.READY, readyHandler);
         map.put(UserState.CHOOSE_REGION, regionHandler);
         map.put(UserState.CHOOSE_TIME, timeHandler);
 
