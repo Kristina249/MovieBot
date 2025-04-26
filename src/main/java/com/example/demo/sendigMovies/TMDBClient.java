@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class TMDBClient {
 	public static void main(String args[]) {
 		TMDBClient t = new TMDBClient();
-		System.out.println(t.sendRequestForMovies("12", "2010", "2020", "US", "7", "90", "120", 1));
+		System.out.println(t.sendRequestForMovies("12", "2000", "2009", "US", "7", "90", "120", 1));
 	}
 	final String API_KEY = "62972d61e70eda6830e96befdca61fff"; 
 	final String BASE_URL = "https://api.themoviedb.org/3";
@@ -65,7 +65,22 @@ public class TMDBClient {
 		JsonNode root = objectMapper.readTree(response);
 		JsonNode resultsNode = root.path("results");
 		for (JsonNode node: resultsNode) {
+			JsonNode genreIdsNode = node.path("genre_ids");
+			List<Integer> genreIds = new ArrayList<>();
+			for (JsonNode id: genreIdsNode) {
+				genreIds.add(id.asInt());
+			}
+			String nodeReleaseDate = node.path("release_date").asText();
+			int date;
+			if (nodeReleaseDate.length() >= 4) {
+				date = Integer.parseInt(nodeReleaseDate.substring(0, 4));
+			} else {
+				date = 0;
+			}
+			if ((genreIds.get(0) == Integer.parseInt(genreId)) && (!(date == 0)) 
+					&& (date > Integer.parseInt(minYear)) && (date < Integer.parseInt(maxYear))) {
 			movies.add(node);
+			}
 		}
 		} catch (Exception e) {
 			e.printStackTrace();

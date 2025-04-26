@@ -15,17 +15,26 @@ public class MovieSender  {
 	public void sentMovies(String chatId, TelegramBot bot) {
 		TMDBClient tmdbClient = new TMDBClient();
 		UsersPreferences user = bot.getPreferences(chatId);
-		List<JsonNode> foundMovies = tmdbClient.sendRequestForMovies(user.getGenre(), user.getMinYear(), user.getMaxYear(), 
+		List<JsonNode> tookMovies = new ArrayList<>();
+				while (tookMovies.size() <= 20) {
+				List<JsonNode> foundMovies = tmdbClient.sendRequestForMovies(user.getGenre(), user.getMinYear(), user.getMaxYear(), 
 				user.getRegion(), user.getMinRating(), user.getRuntimeMin(), user.getRuntimeMax(), user.getPage());
-		if (foundMovies == null) {
-			bot.sendMessage(chatId, "Фильмов по вашему запросу не осталось");
-			return;
+				if (foundMovies.isEmpty()) {
+					break;
+				}
+				for (JsonNode movie: foundMovies) {
+					tookMovies.add(movie);
+				}
+				user.setPage(user.getPage() + 1);
+				}
+		if (tookMovies.isEmpty()) {
+			bot.sendMessage(chatId, "Фильмов по вашему запросу не нашлось");
 		}
-		user.setPage(user.getPage() + 1);
+		
 		Randomizer randomizer = new Randomizer();
 		ParsingMovies parsingMovies = new ParsingMovies();
-		List<Integer> numbersOfMovies = randomizer.randomizeNumberOfMovies(foundMovies);
-		List<JsonNode> choosenMovies = randomizer.getRundomizedMovies(foundMovies, numbersOfMovies);
+		List<Integer> numbersOfMovies = randomizer.randomizeNumberOfMovies(tookMovies);
+		List<JsonNode> choosenMovies = randomizer.getRundomizedMovies(tookMovies, numbersOfMovies);
 		List<Movie> movies = parsingMovies.parseMovies(choosenMovies);
 		StringBuilder str = new StringBuilder();
 		for (Movie movie: movies) {
@@ -34,7 +43,7 @@ public class MovieSender  {
 		str.append("Нажмите /more, чтобы показались другие фильмы");
 		bot.sendMessage(chatId, str.toString());
 		List<JsonNode> remainingMovies = new ArrayList<>();
-		for (JsonNode movie: foundMovies) {
+		for (JsonNode movie: tookMovies) {
 			if (!(choosenMovies.contains(movie))) {
 				remainingMovies.add(movie);
 			}
