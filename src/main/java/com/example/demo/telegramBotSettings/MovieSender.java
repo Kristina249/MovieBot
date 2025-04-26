@@ -29,7 +29,7 @@ public class MovieSender  {
 		List<Movie> movies = parsingMovies.parseMovies(choosenMovies);
 		StringBuilder str = new StringBuilder();
 		for (Movie movie: movies) {
-			str.append(movie).append("\n");
+			str.append(movie.getFormattedMovieInfo()).append("\n");
 		}
 		str.append("Нажмите /more, чтобы показались другие фильмы");
 		bot.sendMessage(chatId, str.toString());

@@ -3,19 +3,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ParsingMovies {
 	public List<Movie> parseMovies(List<JsonNode> jsonMovies) {
 		List<Movie> movies = new ArrayList<>();
 		try {
 		for (JsonNode jsonMovie: jsonMovies) {
-			ObjectMapper mapper = new ObjectMapper();
-			JsonNode movieInfo = mapper.readTree(jsonMovie.asText());	
-			String title = (movieInfo.path("title").asText() != null) ? movieInfo.path("title").asText() : null;
-			String overview = (movieInfo.path("overview").asText() != null) ? movieInfo.path("overview").asText() : null;
-			String releaseDate = ((movieInfo.path("release_date").asText() != null) && !movieInfo.path("release_date").asText().isEmpty()) ? ParsingMovies.getReleaseDate(movieInfo.path("release_date").asText()) : null;
-			String averageVote = (movieInfo.path("vote_average").asText() != null) ? movieInfo.path("vote_average").asText() : null;
+			String title = (!jsonMovie.path("title").asText().isEmpty()) ? jsonMovie.path("title").asText() : null;
+			String overview = (!jsonMovie.path("overview").asText().isEmpty()) ? jsonMovie.path("overview").asText() : null;
+			String releaseDate = (!jsonMovie.path("release_date").asText().isEmpty()) ? ParsingMovies.getReleaseDate(jsonMovie.path("release_date").asText()) : null;
+			String averageVote = (!jsonMovie.path("vote_average").asText().isEmpty()) ? jsonMovie.path("vote_average").asText() : null;
 			Movie movie = new Movie(title, overview, releaseDate, averageVote);
 			movies.add(movie);
 		}

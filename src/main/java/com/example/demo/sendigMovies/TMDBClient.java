@@ -2,9 +2,7 @@ package com.example.demo.sendigMovies;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -14,6 +12,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TMDBClient {
+	public static void main(String args[]) {
+		TMDBClient t = new TMDBClient();
+		System.out.println(t.sendRequestForMovies("12", "2010", "2020", "US", "7", "90", "120", 1));
+	}
 	final String API_KEY = "62972d61e70eda6830e96befdca61fff"; 
 	final String BASE_URL = "https://api.themoviedb.org/3";
 	public List<JsonNode> sendRequestForMovies(String genreId, String minYear, String maxYear, String region, 
@@ -44,10 +46,10 @@ public class TMDBClient {
 						uriBuilder.queryParam("vote_average.gte", minRating);
 					}
 					if (!(runtimeMin.equals("notImpotant"))) {
-						uriBuilder.queryParam("with_runtime.gte", runtimeMin);
+						uriBuilder.queryParam("release_date.gte", minYear + "-01-01");
 					}
 					if (!(runtimeMax.equals("notImpotant"))) {
-						uriBuilder.queryParam("with_runtime.lte", runtimeMax);
+						uriBuilder.queryParam("release_date.lte", maxYear + "-12-31");
 					}
 		            
 					 return uriBuilder.build();
