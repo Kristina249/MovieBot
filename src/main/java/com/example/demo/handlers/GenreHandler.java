@@ -29,14 +29,18 @@ public class GenreHandler implements UserResponseHandler {
 	}
 	
 	public String findGenreId(String value) {
-		try (BufferedReader reader = new BufferedReader(new FileReader("D:\\eclipse\\eclipse workspace\\MovieBot2\\src\\main\\resources\\genres.csv"))) {
+		try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\krist\\eclipse-workspace\\MovieBot\\src\\main\\resources\\genres.csv"))) {
 			String result = null;
 			String line;
 			while ((line = reader.readLine()) != null) {
-				String genre = line.trim().substring(0, line.indexOf(","));
-				if (genre.equalsIgnoreCase(value.trim())) {
-					result = line.substring(line.indexOf(",") + 2);
-				}
+				if (line.isBlank()) continue;  
+				 String[] parts = line.split(",", 2);
+		            if (parts.length < 2) continue;            // если нет запятой — пропускаем
+		            String genreName = parts[0].trim();        // название до запятой
+		            String genreId   = parts[1].trim();        // всё после запятой
+		            if (genreName.equalsIgnoreCase(value.trim())) {
+		               result = genreId;
+		            }
 			}
 			return result;
 		} catch (IOException e) {

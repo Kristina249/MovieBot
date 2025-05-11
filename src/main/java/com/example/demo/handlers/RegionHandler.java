@@ -30,7 +30,7 @@ public class RegionHandler implements UserResponseHandler {
 	}
 	
 	public String findCountryCode(String value) {
-		  try (BufferedReader reader = new BufferedReader(new FileReader("D:\\eclipse\\eclipse workspace\\MovieBot2\\src\\main\\resources\\countries.csv"))) {
+		  try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\krist\\eclipse-workspace\\MovieBot\\src\\main\\resources\\countries.csv"))) {
 			  String line;
 			  String result = null;
 			  while ((line = reader.readLine()) != null) {

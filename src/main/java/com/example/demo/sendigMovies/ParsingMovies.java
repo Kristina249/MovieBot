@@ -9,11 +9,13 @@ public class ParsingMovies {
 		List<Movie> movies = new ArrayList<>();
 		try {
 		for (JsonNode jsonMovie: jsonMovies) {
+			System.out.println(jsonMovie);
 			String title = (!jsonMovie.path("title").asText().isEmpty()) ? jsonMovie.path("title").asText() : null;
 			String overview = (!jsonMovie.path("overview").asText().isEmpty()) ? jsonMovie.path("overview").asText() : null;
 			String releaseDate = (!jsonMovie.path("release_date").asText().isEmpty()) ? ParsingMovies.getReleaseDate(jsonMovie.path("release_date").asText()) : null;
 			String averageVote = (!jsonMovie.path("vote_average").asText().isEmpty()) ? jsonMovie.path("vote_average").asText() : null;
 			Movie movie = new Movie(title, overview, releaseDate, averageVote);
+			System.out.println(movie);
 			movies.add(movie);
 		}
 		} catch (Exception e) {
